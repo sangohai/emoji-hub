@@ -1,0 +1,111 @@
+body {
+    background-color: #121212;
+}
+
+/* 瀑布流卡片样式 */
+.emoji-card {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #333;
+}
+
+.emoji-card:hover {
+    transform: translateY(-5px) scale(1.1);
+    background-color: #2a2a2a;
+    border-color: #0d6efd;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* 图片懒加载动画 */
+.emoji-card img {
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.emoji-card img.loaded {
+    opacity: 1;
+}
+
+/* 隐藏原本浏览器的滚动条，使用自定义极客风格 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* 自定义分类栏的横向滚动条，极简细条风格 */
+.custom-scrollbar::-webkit-scrollbar {
+    height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* App 区域样式 */
+.app-icon {
+    cursor: pointer;
+    width: 90px;
+}
+.app-icon-bg {
+    width: 90px;
+    height: 90px;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.app-icon:hover .app-icon-bg {
+    transform: translateY(-8px);
+    border-color: #0dcaf0 !important;
+    box-shadow: 0 10px 20px rgba(13, 202, 240, 0.2) !important;
+}
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* 盲打模式下，点击卡片时的微小缩放反馈动画 */
+.emoji-card.clicked-feedback {
+    transform: scale(0.85);
+    border-color: #0dcaf0;
+    opacity: 0.8;
+}
+
+/* 🚀 强迫症专属：完美对齐网格 (替代 Bootstrap 默认网格) */
+.perfect-grid {
+    display: grid;
+    /* 自动填充，每个格子最小 64px，最大平分剩余空间，实现两端绝对对齐 */
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 12px;
+    justify-items: center;
+}
+
+/* 密码输入错误的震动特效 */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
+.shake-animation {
+    animation: shake 0.4s ease-in-out;
+}
