@@ -1,11 +1,10 @@
 // app.js - 核心底座模块
-const GITHUB_USERNAME = 'YourUsername'; 
+// 🚀 1. 彻底激活 CDN：这里已经替换成了你的真实 GitHub 用户名！
+const GITHUB_USERNAME = 'sangohai'; 
 const REPO_NAME = 'emoji-hub';
 const CDN_BASE = `https://cdn.jsdelivr.net/gh/${GITHUB_USERNAME}/${REPO_NAME}@main/`;
 
-// 🚀 全局状态引擎 (核心升级)
-window.APP_MODE = 'NORMAL'; // 模式：'NORMAL'(查资料) | 'CIPHER'(密文创作台)
-
+window.APP_MODE = 'NORMAL'; 
 let globalEmojiData = [];       
 let currentFilteredData = [];   
 let currentSelectedEmoji = null;
@@ -35,7 +34,6 @@ window.loadCoreSystem = async function() {
     try {
         const response = await fetch('data/emoji-map.json');
         globalEmojiData = await response.json();
-        
         renderCategories();
         
         searchInput.addEventListener('input', handleSearchDebounced);
@@ -43,7 +41,6 @@ window.loadCoreSystem = async function() {
         emojiGrid.addEventListener('click', handleGridClick);
         document.querySelectorAll('.copy-btn').forEach(btn => btn.addEventListener('click', handleCopy));
         
-        // 🚀 初始化应用与模式控制
         CipherModule.initMixerPanel();
         filterAndRender();
     } catch (error) {
@@ -52,7 +49,6 @@ window.loadCoreSystem = async function() {
     }
 }
 
-/* 瀑布流渲染逻辑 (保持原样) */
 function renderCategories() {
     const categories = ['All', ...new Set(globalEmojiData.map(item => item.category))];
     let html = '';
@@ -91,7 +87,6 @@ function loadMoreChunks() {
     const nextBatch = currentFilteredData.slice(currentRenderCount, currentRenderCount + CHUNK_SIZE);
     let html = '';
     nextBatch.forEach(item => {
-        // 🚀 去掉了外层的 <div class="col">，直接输出 card 交给完美网格排列
         html += `<div class="emoji-card" data-id="${item.id}"><img src="${item.svg_url}" alt="${item.id}" loading="lazy" onload="this.classList.add('loaded')"></div>`;
     });
     emojiGrid.insertAdjacentHTML('beforeend', html);
@@ -111,7 +106,6 @@ function handleSearchDebounced() {
     searchTimeout = setTimeout(() => filterAndRender(), 200);
 }
 
-// 🚀 核心升级：模式分流点击事件
 function handleGridClick(e) {
     const card = e.target.closest('.emoji-card');
     if (!card) return;
@@ -120,12 +114,10 @@ function handleGridClick(e) {
     if (!clickedEmoji) return;
 
     if (window.APP_MODE === 'CIPHER') {
-        // [应用模式]: 微信打字体验，盲打直入，并给卡片一个缩小动画反馈
         CipherModule.addEmoji(clickedEmoji.char);
         card.classList.add('clicked-feedback');
         setTimeout(() => card.classList.remove('clicked-feedback'), 150);
     } else {
-        // [查阅模式]: 保持原有的详情与复制弹窗
         currentSelectedEmoji = clickedEmoji;
         document.getElementById('modalTitle').innerText = currentSelectedEmoji.id.replace(/_/g, ' ').toUpperCase();
         document.getElementById('modalImg').src = currentSelectedEmoji.svg_url;
@@ -134,11 +126,21 @@ function handleGridClick(e) {
     }
 }
 
+// 🚀 2. 修复复制路径的智能拼接逻辑
 function handleCopy(e) {
     if (!currentSelectedEmoji) return;
     const type = e.target.getAttribute('data-type');
-    const isLocal = GITHUB_USERNAME === 'YourUsername';
-    const baseUrl = isLocal ? window.location.origin + '/' : CDN_BASE;
+    
+    const isLocal = GITHUB_USERNAME === 'YourUsername' || GITHUB_USERNAME === '';
+    
+    // 智能获取当前站点的真实根目录 (无论是在本地还是 GitHub Pages 的子目录)
+    let localBase = window.location.origin + window.location.pathname;
+    // 如果 URL 以 index.html 结尾，将其截断，确保它是一个纯净的目录路径
+    localBase = localBase.replace(/\/[^\/]*$/, '/'); 
+    
+    // 决定最终使用 CDN 还是站点直链
+    const baseUrl = isLocal ? localBase : CDN_BASE;
+    
     let textToCopy = '';
     switch (type) {
         case 'char': textToCopy = currentSelectedEmoji.char; break;
