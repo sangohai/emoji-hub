@@ -17,6 +17,30 @@
     </nav>
 
     <div class="container mt-4" style="max-width: 1100px;">
+        <!-- 🚀 [新增：厂牌最高入口 Tag 区] -->
+        <div class="brand-tabs overflow-auto custom-scrollbar" id="brandTabs">
+            <div class="brand-tag active" data-brand="twemoji">
+                <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@master/assets/svg/1f426.svg" class="brand-logo">
+                <span>Twemoji (Twitter)</span>
+            </div>
+            <div class="brand-tag" data-brand="fluent">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" class="brand-logo">
+                <span>Fluent (Microsoft)</span>
+            </div>
+            <div class="brand-tag" data-brand="noto">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="brand-logo">
+                <span>Noto (Google)</span>
+            </div>
+            <div class="brand-tag" data-brand="openmoji">
+                <img src="https://avatars.githubusercontent.com/u/35513186?s=200&v=4" class="brand-logo" style="background-color: #000;">
+                <span>OpenMoji</span>
+            </div>
+            <div class="brand-tag" data-brand="original">
+                <!-- 用纯 CSS 加表情画一个创作者的 Logo -->
+                <div class="brand-logo d-flex align-items-center justify-content-center" style="background-color: #9b59b6; color: white;">✨</div>
+                <span>Original (社区原创)</span>
+            </div>
+        </div>
         <!-- [1. 导航与搜索区] -->
         <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm mb-3" placeholder="🔍 搜索表情 (支持英文、分类、关键字...)">
         <div id="categoryNav" class="d-flex flex-nowrap overflow-auto pb-2 gap-2 custom-scrollbar"></div>

@@ -109,3 +109,59 @@ body {
 .shake-animation {
     animation: shake 0.4s ease-in-out;
 }
+
+/* ================= [厂牌 Tag 样式 (Multiverse)] ================= */
+.brand-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0;
+}
+
+.brand-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: #1a1a1a;
+    border-top: 8px solid #444; /* 默认灰线 */
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.brand-tag:hover {
+    opacity: 0.8;
+    background-color: #222;
+}
+
+/* 激活状态与各厂牌专属 8px 识别色 */
+.brand-tag.active {
+    opacity: 1;
+    background-color: #2a2a2a;
+    color: #fff;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+}
+
+.brand-tag[data-brand="twemoji"].active { border-top-color: #2ecc71; }  /* 清新浅绿色 */
+.brand-tag[data-brand="fluent"].active { border-top-color: #0078D4; }  /* Microsoft 蓝 */
+.brand-tag[data-brand="noto"].active { border-top-color: #EA4335; }    /* Google 红 */
+.brand-tag[data-brand="openmoji"].active { border-top-color: #FCEA2B; }/* OpenMoji 黄 */
+.brand-tag[data-brand="original"].active { border-top-color: #9b59b6; } /* 创造紫 */
+
+.brand-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 2px;
+}
+
+/* 防止切换厂牌时，清空数据导致页面高度塌陷产生的抖动 */
+#emojiGrid {
+    min-height: 60vh; /* 始终保持至少占屏幕 60% 的高度 */
+}
