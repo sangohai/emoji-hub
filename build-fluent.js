@@ -1,4 +1,4 @@
-// build-fluent.js - Microsoft Fluent Emoji 资产洗劫与构建脚本
+// build-fluent.js - Microsoft Fluent Emoji 资产洗劫与构建脚本 (V2.0 修复肤色 Bug 版)
 const fs = require('fs');
 const path = require('path');
 
@@ -40,7 +40,7 @@ function buildFluentMap() {
     const dirs = fs.readdirSync(FLUENT_REPO).filter(f => fs.statSync(path.join(FLUENT_REPO, f)).isDirectory());
     const fluentMap = [];
 
-    console.log(`📂 [2/3] 发现 ${dirs.length} 个原始表情，正在提取 3D 资产与元数据...`);
+    console.log(`📂 [2/3] 发现 ${dirs.length} 个原始表情，正在提取 3D 资产与元数据 (已锁定默认黄豆肤色)...`);
 
     for (const dirName of dirs) {
         const fullPath = path.join(FLUENT_REPO, dirName);
@@ -54,9 +54,18 @@ function buildFluentMap() {
         if (!meta.unicode) continue;
         const hex = meta.unicode.split(' ').filter(h => h !== 'fe0f').join('-');
         
-        // 获取所有图片 (优先获取 Default 默认肤色，避免肤色变体爆炸)
-        const allPngs = getFiles(fullPath, '.png').filter(p => p.includes('Default') || !p.includes('Skintones'));
-        const allSvgs = getFiles(fullPath, '.svg').filter(p => p.includes('Default') || !p.includes('Skintones'));
+        // 获取所有的 png 和 svg
+        let allPngs = getFiles(fullPath, '.png');
+        let allSvgs = getFiles(fullPath, '.svg');
+
+        // 🎯 核心修复 Bug：如果该表情有 Default（默认黄豆肤色）文件夹，强行只在 Default 里挑！
+        // 这样就完美避开了按字母排序时 Dark(黑) 抢在 Default(黄) 前面的问题。
+        if (allPngs.some(p => p.includes('Default'))) {
+            allPngs = allPngs.filter(p => p.includes('Default'));
+        }
+        if (allSvgs.some(p => p.includes('Default'))) {
+            allSvgs = allSvgs.filter(p => p.includes('Default'));
+        }
 
         // 🧠 智能优选算法：PNG 优先拿 3D，没有 3D 拿 Color；SVG 优先拿 Color，没有拿 Flat
         const chosenPng = allPngs.find(p => p.includes('3D')) || allPngs.find(p => p.includes('Color')) || allPngs[0];
